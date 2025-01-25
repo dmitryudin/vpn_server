@@ -1,0 +1,9 @@
+[Unit]
+Description=crypton_vpn
+After=network.target
+[Service]
+Type=oneshot
+User=root
+ExecStart=/root/vpn_server/start.sh
+[Install]
+WantedBy=multi-user.target

@@ -10,6 +10,7 @@ from .utils.password_hasher import *
 from rest_framework.permissions import AllowAny
 from rest_framework.authentication import BasicAuthentication
 import base64
+from rest_framework.permissions import IsAuthenticated
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
@@ -83,6 +84,7 @@ class UserLoginView(generics.GenericAPIView):
 
     
 class UserInfoView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]  # Защита контроллера
     def get(self, request):
         try:
             email = request.query_params.get('email') 

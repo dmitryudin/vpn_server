@@ -1,8 +1,8 @@
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import UserVPN  # Предполагаем, что у вас есть модель UserVPN
-from .utils import generate_verification_token  # Импортируйте функцию генерации токена
+from ..models import UserVPN  # Предполагаем, что у вас есть модель UserVPN
+from .signer import generate_verification_token  # Импортируйте функцию генерации токена
 
 
 def send_verification_email(user_id):

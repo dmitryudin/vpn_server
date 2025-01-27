@@ -3,7 +3,7 @@ from django.contrib import admin
 
 # Create your models here.
 class UserVPN(models.Model):
-    id = models.IntegerField(primary_key=True)
+    
     email = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=200)
     is_email_verified = models.BooleanField(default=False)
@@ -24,7 +24,7 @@ class Server(models.Model):
     active_users = models.IntegerField(default=0)
 
 
-class InviteCode(modelss.Model):
+class InviteCode(models.Model):
     code = models.CharField(max_length=100)
     balance = models.FloatField(default=50.0)
     user = models.ForeignKey(UserVPN, on_delete=models.CASCADE, related_name='invitations')
@@ -35,7 +35,7 @@ class Promocode(models.Model):
     balance = models.FloatField(default=0.0)
 
 
-class Tariff():
+class Tariff(models.Model):
     name = models.CharField(max_length=100)
     descryption = models.CharField(max_length=300)
     cost_in_day = models.FloatField(default=0.0)
@@ -44,7 +44,7 @@ class Tariff():
     user = models.ForeignKey(UserVPN, on_delete=models.CASCADE, related_name='tariff')
 
 
-class Device():
+class Device(models.Model):
     device_type = models.CharField(max_length=100)
     device_id = models.CharField(max_length=300)
     user = models.ForeignKey(UserVPN, on_delete=models.CASCADE, related_name='devices')
@@ -52,11 +52,15 @@ class Device():
 
 
 class UserVpnAdmin(admin.ModelAdmin):
-    list_display = ('email', 'balance', 'is_email_verified')
+    list_display = ('id', 'email', 'balance', 'is_email_verified')
 
 
 class ServerAdmin(admin.ModelAdmin):
     list_display = ('name', 'url', 'ip', 'username', 'password', 'country', 'max_speed_in_mbps', 'active_users')
 
+class DeviceAdmin(admin.ModelAdmin):
+    list_display = ('device_type', 'device_id', 'user')
+
 admin.site.register(UserVPN, UserVpnAdmin)
 admin.site.register(Server, ServerAdmin)
+admin.site.register(Device, DeviceAdmin)

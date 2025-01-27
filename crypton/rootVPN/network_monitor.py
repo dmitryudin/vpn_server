@@ -29,23 +29,23 @@ class KafkaConsumerThread(threading.Thread):
 
     def run(self):
         print(f"Connecting to topic '{self.topic}' on server '{settings.KAFKA_SERVER}'")
-        for message in self.consumer:
-            data = message.value
-            print(f"Received message: {data}")
-            # Update or create a record in the Server model
-            ip_address = data.get('ip_address')
-            speed_sent_mbps = data.get('speed_sent_mbps')
-            speed_recv_mbps = data.get('speed_recv_mbps')
-            server, created = Server.objects.update_or_create(
-                ip=ip_address,
-                defaults={
-                    'load_coef': float(speed_recv_mbps) / get_max_speed(ip_address)
-                }
-            )
-            if created:
-                print(f"Created new server with IP {ip_address}")
-            else:
-                print(f"Updated data for server with IP {ip_address}")
+        # for message in self.consumer:
+        #     data = message.value
+        #     print(f"Received message: {data}")
+        #     # Update or create a record in the Server model
+        #     ip_address = data.get('ip_address')
+        #     speed_sent_mbps = data.get('speed_sent_mbps')
+        #     speed_recv_mbps = data.get('speed_recv_mbps')
+        #     server, created = Server.objects.update_or_create(
+        #         ip=ip_address,
+        #         defaults={
+        #             'load_coef': float(speed_recv_mbps) / get_max_speed(ip_address)
+        #         }
+        #     )
+        #     if created:
+        #         print(f"Created new server with IP {ip_address}")
+        #     else:
+        #         print(f"Updated data for server with IP {ip_address}")
 
     def stop(self):
         self.consumer.close()

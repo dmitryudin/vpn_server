@@ -26,10 +26,18 @@ SECRET_KEY = 'django-insecure-)=x4kt($(n!%n2$40d-9$szkq)6uli2v=123hv=rqjir)m&7m7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
+KAFKA_SERVER = '109.196.101.63:9092'  # Замените на адрес вашего Kafka-сервера
+KAFKA_TOPIC = 'network_usage'      # Замените на ваш топик
 # Application definition
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Замените на ваш SMTP-сервер
+EMAIL_PORT = 587  # Обычно 587 для TLS
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'cryptonvpnone@gmail.com'  # Ваш email
+EMAIL_HOST_PASSWORD = 'unxs htny uggj ghsc'  # Ваш пароль
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -65,7 +73,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365*5),  # Установите время жизни токена на 1 год
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),  # Установите время жизни рефреш-токена (если используете)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365*5),  # Установите время жизни рефреш-токена (если используете)
     'ROTATE_REFRESH_TOKENS': False,  # Отключите ротацию рефреш-токенов
     'BLACKLIST_AFTER_USE': False,  # Отключите черный список токенов после использования
     'USER_ID_FIELD': 'id',

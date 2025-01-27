@@ -18,9 +18,6 @@ class UserVPNSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
 class UserRegistrationSerializer(serializers.ModelSerializer):
     device_type = serializers.CharField()
     device_id = serializers.CharField()
@@ -32,13 +29,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = UserVPN(
             password= hash_password(validated_data['password']),
             email=validated_data['email'],
-            balance = 50.0,
+            balance = 0.0,
+            tariff_id = 1,
             is_email_verified = False
         )
         user.save()
         device = Device(device_type = validated_data['device_type'], device_id = validated_data['device_id'], user = user)
         device.save()
-        tariff = Tariff(name = 'free', descryption = 'Тариф с просмотром рекламы', cost_in_day = 5, max_number_of_devices = 1, max_speed_in_mbps = 5, user = user)
-        tariff.save()
+        
         return user
 

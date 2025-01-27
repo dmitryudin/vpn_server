@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib import admin
 
+
+class Tariff(models.Model):
+    name = models.CharField(max_length=100)
+    descryption = models.CharField(max_length=300)
+    cost_in_day = models.FloatField(default=0.0)
+    max_number_of_devices = models.IntegerField(default=1)
+    max_speed_in_mbps = models.FloatField(default=0.0)
+
 # Create your models here.
 class UserVPN(models.Model):
     
@@ -9,6 +17,7 @@ class UserVPN(models.Model):
     is_email_verified = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
     balance = models.FloatField(default=0.0)
+    tariff = models.ForeignKey(Tariff, on_delete=models.SET_NULL,  related_name='tariff', null=True)
 
 
 class Server(models.Model):
@@ -35,13 +44,8 @@ class Promocode(models.Model):
     balance = models.FloatField(default=0.0)
 
 
-class Tariff(models.Model):
-    name = models.CharField(max_length=100)
-    descryption = models.CharField(max_length=300)
-    cost_in_day = models.FloatField(default=0.0)
-    max_number_of_devices = models.IntegerField(default=1)
-    max_speed_in_mbps = models.FloatField(default=0.0)
-    user = models.ForeignKey(UserVPN, on_delete=models.CASCADE, related_name='tariff')
+
+    
 
 
 class Device(models.Model):
@@ -49,7 +53,8 @@ class Device(models.Model):
     device_id = models.CharField(max_length=300)
     user = models.ForeignKey(UserVPN, on_delete=models.CASCADE, related_name='devices')
 
-
+class InviteCodeAdmin(admin.ModelAdmin):
+    list_display = ('code', 'balance', 'user')
 
 class UserVpnAdmin(admin.ModelAdmin):
     list_display = ('id', 'email', 'balance', 'is_email_verified')
@@ -61,6 +66,15 @@ class ServerAdmin(admin.ModelAdmin):
 class DeviceAdmin(admin.ModelAdmin):
     list_display = ('device_type', 'device_id', 'user')
 
+class TariffAdmin(admin.ModelAdmin):
+    name = models.CharField(max_length=100)
+    descryption = models.CharField(max_length=300)
+    cost_in_day = models.FloatField(default=0.0)
+    max_number_of_devices = models.IntegerField(default=1)
+
+    list_display = ('name', 'descryption', 'cost_in_day', 'max_number_of_devices', 'max_speed_in_mbps')
+
 admin.site.register(UserVPN, UserVpnAdmin)
 admin.site.register(Server, ServerAdmin)
 admin.site.register(Device, DeviceAdmin)
+admin.site.register(Tariff, TariffAdmin)

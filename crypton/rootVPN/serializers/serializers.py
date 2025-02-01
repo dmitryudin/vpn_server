@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import UserVPN, Server, Device, Tariff
-from .utils.password_hasher import *
-from .utils.telegram_bot import *
+from ..models import UserVPN, Server, Device, Tariff
+from ..utils.password_hasher import *
+from ..utils.telegram_bot import *
 
 
 
@@ -9,7 +9,7 @@ from .utils.telegram_bot import *
 class ServerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Server
-        fields = ['id', 'name', 'url', 'ip', 'username', 'country', 'load_coef']
+        fields = ['id', 'name', 'url', 'ip', 'username', 'country', 'load_coef', 'password']
 
 class UserVPNSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,6 +17,11 @@ class UserVPNSerializer(serializers.ModelSerializer):
         fields = ['balance', 'is_blocked']
 
 
+
+class TariffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tariff
+        fields = ('id', 'name', 'descryption', 'days', 'cost', 'max_number_of_devices')
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     device_type = serializers.CharField()

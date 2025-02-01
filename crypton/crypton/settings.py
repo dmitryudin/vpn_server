@@ -39,6 +39,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cryptonvpnone@gmail.com'  # Ваш email
 EMAIL_HOST_PASSWORD = 'unxs htny uggj ghsc'  # Ваш пароль
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_spectacular',
     'rest_framework',
-    'rest_framework_simplejwt',
     'rootVPN'
 ]
 
@@ -71,15 +71,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=365*5),  # Установите время жизни токена на 1 год
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=365*5),  # Установите время жизни рефреш-токена (если используете)
-    'ROTATE_REFRESH_TOKENS': False,  # Отключите ротацию рефреш-токенов
-    'BLACKLIST_AFTER_USE': False,  # Отключите черный список токенов после использования
-    'USER_ID_FIELD': 'id',
-}
+
 
 ROOT_URLCONF = 'crypton.urls'
+
+SECRET_KEY = 'sdfsdfdsffdsfsvvdfgbhrtf'
 
 TEMPLATES = [
     {

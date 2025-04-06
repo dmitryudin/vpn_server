@@ -18,8 +18,11 @@ from ..utils.jwt_lib import jwt_required, create_token
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
-
     def post(self, request, *args, **kwargs):
+        if UserVPN.objects.filter(email=request.data['email'].lower()).exists():
+           return Response({
+        }, status=status.HTTP_409_CONFLICT)
+      
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()

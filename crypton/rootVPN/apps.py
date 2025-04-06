@@ -15,11 +15,12 @@ class RootvpnConfig(AppConfig):
         from .network_monitor import KafkaConsumerThread
         from django.conf import settings
 
-        bot_thread = Thread(target=run_bot)
-        bot_thread.start()
+        # bot_thread = Thread(target=run_bot)
+        # bot_thread.start()
 
         # Запускаем поток потребителя
         while(True):
+            # break
             try:
                 consumer_thread = KafkaConsumerThread(settings.KAFKA_TOPIC)
                 consumer_thread.start()

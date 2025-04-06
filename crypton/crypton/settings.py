@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-KAFKA_SERVER = '109.196.101.63:9092'  # Замените на адрес вашего Kafka-сервера
+KAFKA_SERVER = '109.73.202.105:9092'  # Замените на адрес вашего Kafka-сервера
 KAFKA_TOPIC = 'network_usage'      # Замените на ваш топик
 # Application definition
 

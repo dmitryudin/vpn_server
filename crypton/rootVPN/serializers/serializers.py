@@ -26,11 +26,19 @@ class TariffSerializer(serializers.ModelSerializer):
 class UserRegistrationSerializer(serializers.ModelSerializer):
     device_type = serializers.CharField()
     device_id = serializers.CharField()
+    
     class Meta:
         model = UserVPN
         fields = ('email', 'password', 'device_type', 'device_id')
+        extra_kwargs = {'extra': {'allow_extra_fields': True}}  # Игнорировать лишние поля
+
+
+ 
+
+    
 
     def create(self, validated_data):
+        
         user = UserVPN(
             password= hash_password(validated_data['password']),
             email=validated_data['email'],

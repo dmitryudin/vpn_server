@@ -25,6 +25,11 @@ def get_differance_datetime_in_days_with_now(last_datetime: datetime.datetime)->
 
 
 def carry_out_the_deduction(user: UserVPN)->None:
+    if (user.last_payment==None):
+        user.tariff_id = 1
+        user.save()
+        return
+        
     if (get_differance_datetime_in_days_with_now(last_datetime=user.last_payment)>=1):
         if(user.balance>=1):
             user.balance = user.balance - 1
@@ -57,7 +62,9 @@ class UserInfoView(generics.GenericAPIView):
             user_info = {
                 'balance': user.balance,
                 'is_blocked': user.is_blocked,
-                'current_tarif_id': user.tariff_id
+                'current_tarif_id': user.tariff_id,
+                'is_email_verified':user.is_email_verified
+
             }
 
             return Response({

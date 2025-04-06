@@ -38,9 +38,10 @@ class UserLoginView(generics.GenericAPIView):
             return Response({"error": "Неверные учетные данные"}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            user = UserVPN.objects.prefetch_related('devices', 'tariff', 'invitations').get(email=email)
+            print(email)
+            user = UserVPN.objects.get(email=email)
         except UserVPN.DoesNotExist:
-            return Response({"error": "Неверные учетные данные"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "Неверные учетные данные"}, status=status.HTTP_404_NOT_FOUND)
 
         # Проверяем правильность пароля
         if not check_password(password, user.password):
@@ -56,7 +57,7 @@ class UserLoginView(generics.GenericAPIView):
                 device = Device(device_type = device_type, device_id = device_id, user = user)
                 device.save()
             else:
-                return Response({"error": "Превышен лимит поключенных устройств"}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({"error": "device_limit_over"}, status=status.HTTP_403_FORBIDDEN)
         # Генерируем токены
         token = create_token(user.id)
         # Возвращаем данные пользователя и токены

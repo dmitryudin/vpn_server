@@ -58,6 +58,7 @@ class UserInfoView(generics.GenericAPIView):
             tariffs = Tariff.objects.all()
             tariff_serializer = TariffSerializer(tariffs, many=True)
             server_serializer = ServerSerializer(servers, many=True)
+            
 
             user_info = {
                 'balance': user.balance,
@@ -98,3 +99,19 @@ class CreateInviteCodeView(generics.GenericAPIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserLogout(generics.GenericAPIView):
+    # permission_classes = [IsAuthenticated]  # Защита контроллера
+    # authentication_classes = [JWTAuthentication]  # Аутентификация с помощью JWT
+    @jwt_required
+    def post(self, request):
+        email = request.data.get('email')
+        device_id = request.data.get('device_id')
+        print('email = ', email)
+        user = UserVPN.objects.get(email=email)
+        device = Device.objects.get(device_id = device_id)
+        if device.user_id == user.id:
+            device.delete()
+            return Response({'status':'success'}, status=status.HTTP_200_OK)
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

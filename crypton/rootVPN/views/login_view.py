@@ -23,29 +23,29 @@ class UserLoginView(generics.GenericAPIView):
         # Получаем заголовок Authorization
         auth = request.META.get('HTTP_AUTHORIZATION')
         if not auth:
-            return Response({"error": "Учетные данные не предоставлены"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "UNAUTHORIZED"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Извлекаем и декодируем учетные данные
         try:
             auth_type, credentials = auth.split(' ')
             if auth_type != 'Basic':
-                return Response({"error": "Неверный тип аутентификации"}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({"error": "UNAUTHORIZED"}, status=status.HTTP_401_UNAUTHORIZED)
 
             # Декодируем учетные данные
             decoded_credentials = base64.b64decode(credentials).decode('utf-8')
             email, password = decoded_credentials.split(':')
         except Exception as e:
-            return Response({"error": "Неверные учетные данные"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "UNAUTHORIZED"}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             print(email)
             user = UserVPN.objects.get(email=email)
         except UserVPN.DoesNotExist:
-            return Response({"error": "Неверные учетные данные"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "UNAUTHORIZED"}, status=status.HTTP_404_NOT_FOUND)
 
         # Проверяем правильность пароля
         if not check_password(password, user.password):
-            return Response({"error": "Неверные учетные данные"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "UNAUTHORIZED"}, status=status.HTTP_401_UNAUTHORIZED)
 
         
         tariff = Tariff.objects.get(id= user.tariff_id if user.tariff_id!=None else 1)

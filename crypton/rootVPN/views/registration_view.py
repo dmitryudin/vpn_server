@@ -14,6 +14,8 @@ import random
 from ..utils.email_sender import send_verification_email, verify_email
 import datetime
 from ..utils.jwt_lib import jwt_required, create_token
+from threading import Thread
+
 
 
 class UserRegistrationView(generics.CreateAPIView):
@@ -42,11 +44,11 @@ class UserRegistrationView(generics.CreateAPIView):
             except Exception as e:
                 print(e)
         
-        send_verification_email(user.id)
+        Thread(target=send_verification_email, args=(user.id,)).start()
                 
         # Генерируем токены
         token = create_token(user.id)
-        print('user_id from controller', user.id)
+       
         # Формируем ответ с токенами
         return Response({
             'refresh_token': token,

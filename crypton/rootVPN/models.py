@@ -45,6 +45,11 @@ class Promocode(models.Model):
     balance = models.FloatField(default=0.0)
 
 
+class Version(models.Model):
+    platform = models.CharField(max_length=100, unique=True)
+    version = models.CharField(max_length=100)
+    url = models.CharField(max_length=10000)
+
 
     
 
@@ -67,6 +72,10 @@ class ServerAdmin(admin.ModelAdmin):
 class DeviceAdmin(admin.ModelAdmin):
     list_display = ('device_type', 'device_id', 'user')
 
+class VersionAdmin(admin.ModelAdmin):
+    list_display = ('platform', 'version', 'url')
+
+
 class TariffAdmin(admin.ModelAdmin):
 
 
@@ -77,3 +86,4 @@ admin.site.register(Server, ServerAdmin)
 admin.site.register(Device, DeviceAdmin)
 admin.site.register(Tariff, TariffAdmin)
 admin.site.register(InviteCode, InviteCodeAdmin)
+admin.site.register(Version, VersionAdmin)

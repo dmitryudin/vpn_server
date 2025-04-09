@@ -36,7 +36,7 @@ class ServerInfoView(generics.GenericAPIView):
                 
             })
         except UserVPN.DoesNotExist:
-            return Response({'error': 'Неизвестная ошибка'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Unexpected error'}, status=status.HTTP_400_BAD_REQUEST)
         
 
 

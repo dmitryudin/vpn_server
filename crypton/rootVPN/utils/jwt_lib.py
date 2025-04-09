@@ -29,19 +29,19 @@ def decode_token(token):
 
 def jwt_required(func):
     def wrapper(*args, **kwargs):
-        print("Что-то происходит до вызова функции. ", *kwargs)
+       
         request = args[1]
         auth = request.META.get('HTTP_AUTHORIZATION')
         if not auth:
-            return Response({"error": "Учетные данные не предоставлены"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "No auth data"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Извлекаем и декодируем учетные данные
         try:
             auth_type, credentials = auth.split(' ')
             if auth_type != 'Token':
-                return Response({"error": "Неверный тип аутентификации"}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
         except:
-            return Response({"error": "Неверный тип аутентификации"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "Invalid auth type"}, status=status.HTTP_401_UNAUTHORIZED)
         
         try:
             user_id = decode_token(credentials)['user_id']
@@ -50,6 +50,6 @@ def jwt_required(func):
         
 
         result = func(*args, **kwargs)
-        print("Что-то происходит после вызова функции.")
+        
         return result
     return wrapper

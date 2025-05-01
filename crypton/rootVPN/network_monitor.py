@@ -56,3 +56,17 @@ class KafkaConsumerThread(threading.Thread):
 
     def stop(self):
         self.consumer.close()
+
+
+import time
+while(True):
+            # break
+    try:
+        consumer_thread = KafkaConsumerThread(settings.KAFKA_TOPIC)
+        consumer_thread.start()
+        print('kafka consumer started')
+        break
+       
+    except:
+        print('ettemt to attach')
+        time.sleep(2)

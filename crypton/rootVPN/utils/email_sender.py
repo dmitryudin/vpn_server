@@ -9,24 +9,155 @@ import datetime
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.header import Header
 
 def send_verification_email(user_id):
     try:
         user = UserVPN.objects.get(id=user_id)
         token = generate_verification_token(user.email)
         verification_link = f"http://109.73.202.105:8000/api/verify-email/?token={token}"
+        
 
-        msg = MIMEMultipart()
-        msg['From'] = settings.EMAIL_HOST_USER
+        
+                
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = Header('🔐 Подтверждение сброса пароля | CryptonVPN', 'utf-8')
+        msg['From'] = Header('CryptonVPN <support@cryptonvpn.com>', 'utf-8')
         msg['To'] = user.email
-        msg['Subject'] = 'Ссылка для верификации'
 
-        # Добавляем текстовое содержимое
-        msg.attach(MIMEText(f'Подтвердите регистрацию CryptonVPN и пользуйтесь Premium бесплатно 10 дней {verification_link}', 'plain'))
+        # Текстовая версия для почтовых клиентов без поддержки HTML
+        text = f"""Для подтверждения электронной почты перейдите по ссылке:
+        {verification_link}
+
+        С уважением, команда CryptonVPN"""
+
+        # HTML-версия письма
+        html = f"""
+        <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Подтверждение почты</title>
+            <style>
+                * {{
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Segoe UI', system-ui, sans-serif;
+                }}
+                
+                body {{
+                    background: #f7fafc;
+                    padding: 40px 20px;
+                }}
+                
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                    overflow: hidden;
+                }}
+                
+                .header {{
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    padding: 2rem;
+                    text-align: center;
+                }}
+                
+                .logo {{
+                    width: 160px;
+                    height: auto;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+                }}
+                
+                .content {{
+                    padding: 2.5rem;
+                    color: #4a5568;
+                }}
+                
+                h1 {{
+                    color: #2d3748;
+                    margin-bottom: 1.5rem;
+                    font-size: 1.875rem;
+                }}
+                
+                .cta-button {{
+                    display: inline-block;
+                    margin: 2rem 0;
+                    padding: 1rem 2rem;
+                    background: #4a5568;
+                    color: white !important;
+                    text-decoration: none;
+                    border-radius: 8px;
+                    transition: transform 0.2s;
+                    font-weight: 600;
+                }}
+                
+                .cta-button:hover {{
+                    transform: translateY(-2px);
+                    background: #2d3748;
+                }}
+                
+                .footer {{
+                    margin-top: 2rem;
+                    padding-top: 2rem;
+                    border-top: 1px solid #e2e8f0;
+                    text-align: center;
+                    color: #718096;
+                }}
+                
+                @media (max-width: 640px) {{
+                    .content {{
+                        padding: 1.5rem;
+                    }}
+                    
+                    h1 {{
+                        font-size: 1.5rem;
+                    }}
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <img src="https://i.ibb.co/5KqY0Md/logo-white.png" alt="CryptonVPN" class="logo">
+                </div>
+                
+                <div class="content">
+                    <h1>Подтверждение почты</h1>
+                    <p>Для завершения регистрации нажмите кнопку ниже:</p>
+                    
+                    <a href="{verification_link}" class="cta-button">Подтвердить</a>
+                    
+                    <p>Если вы не регистрировались на сервисе CryptonVPN, проигнорируйте это письмо.</p>
+                    
+                    <div class="footer">
+                        <p>© 2024 CryptonVPN. Все права защищены.</p>
+                        <p>Это письмо отправлено автоматически, пожалуйста не отвечайте на него.</p>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        # Прикрепляем обе версии
+        part_text = MIMEText(text, 'plain', 'utf-8')
+        part_html = MIMEText(html, 'html', 'utf-8')
+
+        msg.attach(part_text)
+        msg.attach(part_html)
+        
 
         try:
             # Устанавливаем соединение с SMTP сервером
+            
             with smtplib.SMTP('smtp.gmail.com', 587) as server:
+                print('send email begin')
+                
                 server.starttls()  # Используем TLS
                 server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)  # Логинимся
                 server.send_message(msg)  # Отправляем сообщение
@@ -37,6 +168,7 @@ def send_verification_email(user_id):
 
             return {'message': 'Verification email sent!'}
     except UserVPN.DoesNotExist:
+        print('user not exist')
         return {'error': 'User not found'}
 
 from django.core.signing import BadSignature

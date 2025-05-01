@@ -4,6 +4,7 @@ After=network.target
 [Service]
 Type=oneshot
 User=root
+WorkingDirectory=/root/vpn_server
 ExecStart=/root/vpn_server/start.sh
 [Install]
 WantedBy=multi-user.target

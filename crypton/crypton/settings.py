@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-KAFKA_SERVER = '109.73.202.105:9092'  # Замените на адрес вашего Kafka-сервера
+KAFKA_SERVER = '0.0.0.0:9092'  # Замените на адрес вашего Kafka-сервера
 KAFKA_TOPIC = 'network_usage'      # Замените на ваш топик
 # Application definition
 
@@ -142,6 +143,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'root/vpn_server/crypton/static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Для разработки
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

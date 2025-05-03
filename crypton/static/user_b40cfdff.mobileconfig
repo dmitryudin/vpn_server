@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>IKEv2</key>
+            <dict>
+                <key>AuthenticationMethod</key>
+                <string>None</string>
+                <key>RemoteAddress</key>
+                <string>vpnserver123.ddns.net</string>
+                <key>RemoteIdentifier</key>
+                <string>vpnserver123.ddns.net</string>
+                <key>LocalIdentifier</key>
+                <string>user_b40cfdff</string>
+                <key>ExtendedAuthEnabled</key>
+                <true/>
+                <key>AuthName</key>
+                <string>user_b40cfdff</string>
+                <key>AuthPassword</key>
+                <string>fe44ab1842e6433d</string>
+                <!-- Убрано упоминание сертификата -->
+            </dict>
+            <key>PayloadDescription</key>
+            <string>VPN (IKEv2)</string>
+            <key>PayloadDisplayName</key>
+            <string>VPN user_b40cfdff</string>
+            <key>PayloadIdentifier</key>
+            <string>com.example.vpn.ikev2.7f5f5395-52f9-4a22-8c85-aab57a00fee1</string>
+            <key>PayloadType</key>
+            <string>com.apple.vpn.managed</string>
+            <key>PayloadUUID</key>
+            <string>7f5f5395-52f9-4a22-8c85-aab57a00fee1</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>UserDefinedName</key>
+            <string>VPN (IKEv2)</string>
+            <key>VPNType</key>
+            <string>IKEv2</string>
+            <!-- Добавлены важные параметры для работы без сертификатов -->
+            <key>IKESecurityAssociationParameters</key>
+            <dict>
+                <key>EncryptionAlgorithm</key>
+                <string>AES-256</string>
+                <key>IntegrityAlgorithm</key>
+                <string>SHA2-256</string>
+                <key>DiffieHellmanGroup</key>
+                <integer>14</integer>
+            </dict>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Настройки VPN (IKEv2)</string>
+    <key>PayloadDisplayName</key>
+    <string>VPN user_b40cfdff</string>
+    <key>PayloadIdentifier</key>
+    <string>com.example.profile.6fc70e6d-a04f-40d9-9a41-295235af03e5</string>
+    <key>PayloadOrganization</key>
+    <string>Your Company</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>6fc70e6d-a04f-40d9-9a41-295235af03e5</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>
+    

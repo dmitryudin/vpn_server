@@ -30,3 +30,13 @@ kafka-python
 yoomoney
 pyjwt
 python-telegram-bot
+aiogram
+dotenv
+confluent_kafka
+redis
+celery
+django_celery_results
+django_celery_beat
+celery[gevent]
+
+

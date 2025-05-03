@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)=x4kt($(n!%n2$40d-9$szkq)6uli2v=123hv=rqjir)m&7m7
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+RUN_TELEGRAM_BOT = True
 ALLOWED_HOSTS = ['*']
 
 KAFKA_SERVER = '0.0.0.0:9092'  # Замените на адрес вашего Kafka-сервера
@@ -41,6 +41,17 @@ EMAIL_HOST_USER = 'cryptonvpnone@gmail.com'  # Ваш email
 EMAIL_HOST_PASSWORD = 'unxs htny uggj ghsc'  # Ваш пароль
 
 
+# Настройки Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Брокер (Redis)
+# CELERY_RESULT_BACKEND = 'django-db'  # Сохранение результатов в БД Django
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = ('rootVPN.tasks',)
+CELERY_TIMEZONE = 'Europe/Moscow'  # Ваша временная зона
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,7 +60,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_spectacular',
+    'django_celery_beat',
     'rest_framework',
+    'django_celery_results',
     'rootVPN'
 ]
 
@@ -153,3 +166,4 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

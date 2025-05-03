@@ -1,0 +1,12 @@
+[Unit]
+Description=Celery Service
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/vpn_server/crypton
+ExecStart=/usr/local/bin/celery -A crypton worker --loglevel INFO
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

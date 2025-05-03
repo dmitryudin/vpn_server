@@ -51,9 +51,11 @@ async def create_subscription(days, telegram_id, device_type):
                 serverUrl = serverVPN.url
                 serverIp = serverVPN.ip
             subscription.is_active = True
-            subscription
+            
             subscription.last_payment = datetime.datetime.now()
-            subscription.days_at_subscribe = days
+            if subscription.days_at_subscribe:
+                subscription.days_at_subscribe += days
+            else: subscription.days_at_subscribe = days
             try:
                 await vpnUserManager.add_user(username=subscription.username, password=subscription.password)
 

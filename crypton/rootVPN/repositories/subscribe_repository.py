@@ -45,6 +45,15 @@ class SubscribeRepository:
             )
         return None
 
+
+    @sync_to_async
+    def get_by_telegram_id(self, telegram_id) -> SubscribeEntity:
+        userVPN = UserVPN.objects.filter(telegram_id=telegram_id).first()
+        subscribe = Subscribe.objects.filter(user_id=userVPN.id).first()
+        return SubscribeEntity(username=subscribe.username, password=subscribe.password, last_payment=subscribe.last_payment, days_at_subscribe=subscribe.days_at_subscribe, server_id=subscribe.server_id, user_id = subscribe.user_id, device_type=subscribe.device_type)
+
+        
+        
     @sync_to_async
     def get(self, username)->SubscribeEntity:
         subscribe = Subscribe.objects.filter(username=username).first()

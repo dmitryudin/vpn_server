@@ -20,6 +20,8 @@ from dotenv import load_dotenv
 import os
 
 from ..repositories.user_repository import UserRepository
+from ..repositories.subscribe_repository import SubscribeRepository
+from ..repositories.server_repository import ServerRepository
 from ..entities.user_entity import UserEntity
 
 # Загрузка переменных окружения
@@ -183,8 +185,8 @@ async def start_command(message: types.Message, state: FSMContext):
 async def handle_menu(message: types.Message, state: FSMContext):
     if message.text == "Купить подписку 🛒":
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Месячная подписка (500 руб) ⏰", callback_data="monthly")],
-            [InlineKeyboardButton(text="Годовая подписка (5000 руб) 📅", callback_data="yearly")],
+            [InlineKeyboardButton(text="Месячная подписка (120 руб) ⏰", callback_data="monthly")],
+            # [InlineKeyboardButton(text="Годовая подписка (5000 руб) 📅", callback_data="yearly")],
         ])
         await message.answer(
             "Выберите тип подписки на VPN:",
@@ -204,15 +206,17 @@ async def handle_menu(message: types.Message, state: FSMContext):
         )
         await state.set_state(SubscriptionForm.INSTRUCTIONS)
     elif message.text == "Моя подписка 📋":
-        subscription_info = get_subscription_info(message.from_user.id)
-        if subscription_info:
-            subscription_type, end_date, user_vpn, password_vpn = subscription_info
+        telegram_id = message.from_user.id
+        subscribe = await SubscribeRepository().get_by_telegram_id(telegram_id=telegram_id)
+        
+        
+        if subscribe:
+            server = await ServerRepository().get(subscribe.server_id)
+            
             await message.answer(
-                f"Ваша подписка: {subscription_type}\n"
-                f"Действует до: {end_date}\n"
-                f"Учетные данные:\n"
-                f"Пользователь: {user_vpn}\n"
-                f"Пароль: {password_vpn}"
+                f"Ваша подписка: {subscribe.device_type}\n"
+                f"Осталось {subscribe.days_at_subscribe} дней\n"
+                f"Скачать профиль VPN: http://147.45.249.29:8000/download-vpn/?username={subscribe.username}&password={subscribe.password}&url={server.url}&redirect=safari\n"
             )
         else:
             await message.answer("У вас нет активной подписки.")
@@ -240,7 +244,7 @@ async def process_subscription_type(callback: types.CallbackQuery, state: FSMCon
         
         # Получаем данные подписки
         try:
-            url, username, password = await create_subscription(10, telegram_id, device_type='iphone')
+            url, username, password = await create_subscription(30, telegram_id, device_type='iphone')
             
             # # Генерируем конфиг
             # config_content = generate_ios_config(
